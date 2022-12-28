@@ -12,13 +12,15 @@ limitations under the License.
 """
 
 
-from mkdocs.plugins import BasePlugin, Navigation, Page
+from mkdocs.plugins import BasePlugin, Navigation, Page, Files
 
-from childpages_card_grid.page_parser import PageParser
+from mkdocs.structure.files import File
 
-from childpages_card_grid.content_manager import ContentManager
+from .page_parser import PageParser
 
-from childpages_card_grid.section_reader import SectionReader
+from .content_manager import ContentManager
+
+from .section_reader import SectionReader
 
 
 class ChildPagesCardGridPlugin(BasePlugin):
@@ -88,6 +90,16 @@ class ChildPagesCardGridPlugin(BasePlugin):
                     return new_output
                     
         return output
+
+    
+    def on_files(self, files: Files, *, config):
+        """
+        Add the .css file to the stylesheet directory
+        """
+
+        file = File()
+
+
 
     def on_shutdown(self):
         """cleanup at the end of the mkdocs invocation"""

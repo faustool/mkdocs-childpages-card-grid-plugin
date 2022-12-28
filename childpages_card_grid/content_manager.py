@@ -2,7 +2,7 @@ import os
 
 from mkdocs.plugins import Page
 
-from childpages_card_grid.page_parser import MainTagLocation
+from .page_parser import MainTagLocation
 
 class ContentManager:
 
