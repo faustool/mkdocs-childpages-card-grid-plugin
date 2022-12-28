@@ -1,0 +1,5 @@
+.vscode/
+test/actual/
+mkdocs_childpages_card_grid.egg-info/
+childpages_card_grid/__pycache__/
+site/
