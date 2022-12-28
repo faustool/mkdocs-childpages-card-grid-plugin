@@ -11,19 +11,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
-from mkdocs.plugins import BasePlugin, Navigation, Page, Files
-
-from mkdocs.structure.files import File
-
-from .page_parser import PageParser
+from mkdocs.config import base
+from mkdocs.config import config_options as c
+from mkdocs.plugins import BasePlugin, Navigation, Page
 
 from .content_manager import ContentManager
-
+from .page_parser import PageParser
 from .section_reader import SectionReader
 
+import logging
+log = logging.getLogger("mkdocs.plugins." + __name__)
 
-class ChildPagesCardGridPlugin(BasePlugin):
+
+class ChildPagesCardGridPluginConfig(base.Config):
+    include_all = c.Type(bool, default=True)
+
+class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
 
     # prevent reading the navigation map over and over again
     read = False
@@ -31,8 +34,10 @@ class ChildPagesCardGridPlugin(BasePlugin):
     # contains a map of child pages
     nav_map = dict[str, list[Page]]()
 
+    # manages the html manipulation
     content_manager = ContentManager()
 
+    # read the navigation map
     section_reader = SectionReader()
 
     def __init__(self):
@@ -77,6 +82,10 @@ class ChildPagesCardGridPlugin(BasePlugin):
         """
         Insert the children grid card into the page after the main tag
         """
+        if 'childpages_card_grid' in page.meta:
+            log.info(f"{page.title} has metadata")
+
+
         if page.file.dest_uri in self.nav_map:
             child_list = self.nav_map[page.file.dest_uri]
             if len(child_list) > 0:
@@ -84,22 +93,10 @@ class ChildPagesCardGridPlugin(BasePlugin):
                 page_parser = PageParser()
                 page_parser.feed(output)
 
-                if page_parser.main_tag_location:
+                if page_parser.article_closing_tag_location:
                     new_content = self.content_manager.generate_new_content(page, child_list)
-                    new_output = self.content_manager.insert_new_content(output, new_content, page_parser.main_tag_location)
+                    new_output = self.content_manager.insert_new_content(output, new_content, page_parser.article_closing_tag_location)
                     return new_output
                     
         return output
 
-    
-    def on_files(self, files: Files, *, config):
-        """
-        Add the .css file to the stylesheet directory
-        """
-
-        file = File()
-
-
-
-    def on_shutdown(self):
-        """cleanup at the end of the mkdocs invocation"""

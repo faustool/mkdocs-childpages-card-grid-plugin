@@ -1,8 +1,8 @@
 from html.parser import HTMLParser
 
-class MainTagLocation:
+class ArticleClosingTagLocation:
     """
-    Represents the location of the <main> tag in an HTML document.
+    Represents the location of the </article> closing tag in an HTML document.
     """
 
     line: -1
@@ -17,9 +17,9 @@ class PageParser(HTMLParser):
     HTML Parser to read an HTML document and locate the <main> tag.
     """
 
-    main_tag_location: MainTagLocation
+    article_closing_tag_location: ArticleClosingTagLocation
 
     def handle_endtag(self, tag):
-        if tag == "main":
+        if tag == "article":
             line, offset = self.getpos()
-            self.main_tag_location = MainTagLocation(line, offset)
+            self.article_closing_tag_location = ArticleClosingTagLocation(line, offset)
