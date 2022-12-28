@@ -1,4 +1,4 @@
-# Child pages card grid plugin
+# MkDocs Child Pages Card Grid Plugin
 
 **Under development, use with caution!**
 
@@ -15,6 +15,11 @@ TODO items:
 ## Config
 
 ```yaml
+theme: 
+  name: material
+  features:
+    - navigation.indexes
+
 extra_css:
   - stylesheets/childpages_card_grid.css
 
@@ -55,3 +60,7 @@ Likewise, when `include_all: False`, it is possible to include the card grid in 
     padding: 2px 16px;
 }
 ```
+
+# Limitations
+
+This plugin was only tested with MkDocs Material Theme and the `navigation.indexes` feature enabled. It may be that other themes or other features of the Material theme generate a different `nav` tree and this plugin will not be able to figure out the parent/child pages.
