@@ -11,17 +11,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
+from mkdocs.config import base
+from mkdocs.config import config_options as c
 from mkdocs.plugins import BasePlugin, Navigation, Page
 
-from childpages_card_grid.page_parser import PageParser
+from .content_manager import ContentManager
+from .page_parser import PageParser
+from .section_reader import SectionReader
 
-from childpages_card_grid.content_manager import ContentManager
+import logging
+log = logging.getLogger("mkdocs.plugins." + __name__)
 
-from childpages_card_grid.section_reader import SectionReader
+METADATA_NAME = 'childpages_card_grid'
 
 
-class ChildPagesCardGridPlugin(BasePlugin):
+class ChildPagesCardGridPluginConfig(base.Config):
+    include_all = c.Type(bool, default=True)
+
+class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
 
     # prevent reading the navigation map over and over again
     read = False
@@ -29,8 +36,10 @@ class ChildPagesCardGridPlugin(BasePlugin):
     # contains a map of child pages
     nav_map = dict[str, list[Page]]()
 
+    # manages the html manipulation
     content_manager = ContentManager()
 
+    # read the navigation map
     section_reader = SectionReader()
 
     def __init__(self):
@@ -75,19 +84,26 @@ class ChildPagesCardGridPlugin(BasePlugin):
         """
         Insert the children grid card into the page after the main tag
         """
-        if page.file.dest_uri in self.nav_map:
+
+        add_card_grid = self.config.include_all # add all children by default, or not, based on plugin config
+
+        if METADATA_NAME in page.meta:
+            metadata_value = page.meta[METADATA_NAME].lower()
+            if metadata_value == 'exclude': add_card_grid = False # set to false if metadata says to exclude
+            if metadata_value == 'include': add_card_grid = True # set to True if metadata says to include
+
+            
+        if add_card_grid and page.file.dest_uri in self.nav_map:
             child_list = self.nav_map[page.file.dest_uri]
             if len(child_list) > 0:
                 # find the main tag in the output html
                 page_parser = PageParser()
                 page_parser.feed(output)
 
-                if page_parser.main_tag_location:
+                if page_parser.article_closing_tag_location:
                     new_content = self.content_manager.generate_new_content(page, child_list)
-                    new_output = self.content_manager.insert_new_content(output, new_content, page_parser.main_tag_location)
+                    new_output = self.content_manager.insert_new_content(output, new_content, page_parser.article_closing_tag_location)
                     return new_output
                     
         return output
 
-    def on_shutdown(self):
-        """cleanup at the end of the mkdocs invocation"""
