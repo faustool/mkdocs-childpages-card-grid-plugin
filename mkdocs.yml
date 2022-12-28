@@ -1,0 +1,9 @@
+site_name: Child Pages Card Grid MKDocs Template
+
+theme: 
+  name: material
+  features:
+    - navigation.indexes
+
+plugins:
+  - childpages-card-grid:
