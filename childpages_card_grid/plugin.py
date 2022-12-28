@@ -22,6 +22,8 @@ from .section_reader import SectionReader
 import logging
 log = logging.getLogger("mkdocs.plugins." + __name__)
 
+METADATA_NAME = 'childpages_card_grid'
+
 
 class ChildPagesCardGridPluginConfig(base.Config):
     include_all = c.Type(bool, default=True)
@@ -82,11 +84,16 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
         """
         Insert the children grid card into the page after the main tag
         """
-        if 'childpages_card_grid' in page.meta:
-            log.info(f"{page.title} has metadata")
 
+        add_card_grid = self.config.include_all # add all children by default, or not, based on plugin config
 
-        if page.file.dest_uri in self.nav_map:
+        if METADATA_NAME in page.meta:
+            metadata_value = page.meta[METADATA_NAME].lower()
+            if metadata_value == 'exclude': add_card_grid = False # set to false if metadata says to exclude
+            if metadata_value == 'include': add_card_grid = True # set to True if metadata says to include
+
+            
+        if add_card_grid and page.file.dest_uri in self.nav_map:
             child_list = self.nav_map[page.file.dest_uri]
             if len(child_list) > 0:
                 # find the main tag in the output html

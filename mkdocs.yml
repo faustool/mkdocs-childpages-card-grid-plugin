@@ -8,3 +8,4 @@ extra_css:
   - stylesheets/childpages_card_grid.css
 plugins:
   - childpages-card-grid:
+      include_all: False
