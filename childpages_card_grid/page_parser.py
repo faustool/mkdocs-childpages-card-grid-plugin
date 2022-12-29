@@ -2,7 +2,7 @@ from html.parser import HTMLParser
 
 class ArticleClosingTagLocation:
     """
-    Represents the location of the </article> closing tag in an HTML document.
+    Represents the location of the closing </article> tag in an HTML document.
     """
 
     line: -1
@@ -14,7 +14,7 @@ class ArticleClosingTagLocation:
 
 class PageParser(HTMLParser):
     """
-    HTML Parser to read an HTML document and locate the <main> tag.
+    HTML Parser to read an HTML document and locate the closing </article> tag.
     """
 
     article_closing_tag_location: ArticleClosingTagLocation
