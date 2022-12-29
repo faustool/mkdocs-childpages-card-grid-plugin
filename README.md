@@ -8,7 +8,7 @@ Users can include card grids on all pages or configure using markdown metadata t
 
 TODO items:
 
-- [ ] Add metadata to exclude a page from their parent using metadata (e.g. childpages_card_grid_parent: include/exclude).
+- [ ] Add linters, build, versioning, tests, etc. Professional stuff 😄
 - [ ] Add config to always include or exclude a page in their parent card grid.
 - [ ] Add support to include `teaser` content from metadata, possibly in conjunction with the [wilhelmer/mkdocs-add-teaser plugin](https://github.com/wilhelmer/mkdocs-add-teaser).
 
