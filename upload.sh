@@ -1,9 +1,6 @@
-# -------------------------------------------------------------
-# update the package on pypi
-#
-# Tip: if you don't want to retype pypi's username every time
-#      define it as an environement variable (TWINE_USERNAME)
-# -------------------------------------------------------------
+# -----------------------------------------------------------------------
+# upload the package to pypi (main branch) or testpypi (any other branch)
+# -----------------------------------------------------------------------
 function warn {
     GREEN='\033[0;32m'
     NORMAL='\033[0m'
@@ -25,9 +22,6 @@ if test -d "./dist"; then
     warn "RELEASE ${package_name} (${package_version}) ON PYPI:"
     warn "Upload to Pypi..."
     if twine upload -r $pypi_repo dist/* ; then
-        warn "... create tag ${package_version}, and push to remote git repo..."
-        warn "$ git tag ${package_version}"
-        warn "$ git push --tags"
         warn "Done (${package_version})!"
     else
         warn "Failed (${package_version})!"
