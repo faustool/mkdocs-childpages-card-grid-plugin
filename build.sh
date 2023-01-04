@@ -10,7 +10,6 @@ function warn {
     echo -e "${GREEN}$1${NORMAL}"
 }
 
-setup="py setup.py"
 package_name=$($setup --name)
 package_version=v$($setup --version) # add a 'v' in front (git convention) 
 
@@ -19,7 +18,7 @@ warn "Cleaning up..."
 rm -rf dist
 rm -rf "${package_name}.egg-info"
 warn "Recreating wheels..."
-if py -m build; then
+if python3 -m build; then
     warn "Done (${package_version})!"
 else
     warn "Failed (${package_version})!"
