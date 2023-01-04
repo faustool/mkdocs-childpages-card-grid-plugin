@@ -8,13 +8,6 @@ if test "$RELEASE_VERSION" == ""; then
     exit 1
 fi
 
-CHANGE_COUNT=$(git status --porcelain | wc -l)
-
-if test $CHANGE_COUNT -gt 0; then
-    echo "There are pending changes that need to be commited"
-    exit 1
-fi
-
-
-
+git checkout -b "release-${RELEASE_VERSION}" "develop"
 echo $RELEASE_VERSION > VERSION
+git commit -a -m "Bumped version number to ${RELEASE_VERSION}"
