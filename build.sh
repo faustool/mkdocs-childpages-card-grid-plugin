@@ -10,8 +10,9 @@ function warn {
     echo -e "${GREEN}$1${NORMAL}"
 }
 
+setup="python3 setup.py"
 package_name=$($setup --name)
-package_version=v$($setup --version) # add a 'v' in front (git convention) 
+package_version=$($setup --version)
 
 warn "BUILD ${package_name} (${package_version}) ON PYPI:"
 warn "Cleaning up..."

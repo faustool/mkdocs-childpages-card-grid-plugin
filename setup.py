@@ -1,4 +1,6 @@
 import os
+import subprocess
+
 from setuptools import setup, find_packages
 
 # --------------------
@@ -11,7 +13,7 @@ def read_file(fname):
 
 setup(
     name='mkdocs-childpages-card-grid-plugin',
-    version=read_file('VERSION'),
+    version=read_file('VERSION').strip(),
     description='Create card grids with links to child pages on your MkDocs site',
     long_description=read_file('README.md'),
     long_description_content_type='text/markdown',

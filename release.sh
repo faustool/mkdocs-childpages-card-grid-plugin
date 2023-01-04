@@ -10,13 +10,21 @@ function warn {
     echo -e "${GREEN}$1${NORMAL}"
 }
 
+setup="python3 setup.py"
 package_name=$($setup --name)
-package_version=v$($setup --version) # add a 'v' in front (git convention) 
+package_version=$($setup --version)
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+if test "$branch" == "main"; then
+  pypi_repo="pypi" # only release to pypi.org from the main branch
+else
+  pypi_repo="testpypi" # any calls to this script outside the main branch will upload to test.pypi.org
+fi
 
 if test -d "./dist"; then
     warn "RELEASE ${package_name} (${package_version}) ON PYPI:"
     warn "Upload to Pypi..."
-    if twine upload -r pypi dist/* ; then
+    if twine upload -r $pypi_repo dist/* ; then
         warn "... create tag ${package_version}, and push to remote git repo..."
         warn "$ git tag ${package_version}"
         warn "$ git push --tags"
