@@ -1,5 +1,6 @@
 .vscode/
 test/actual/
-mkdocs_childpages_card_grid.egg-info/
+mkdocs_childpages_card_grid_plugin.egg-info/
 childpages_card_grid/__pycache__/
 site/
+dist/
