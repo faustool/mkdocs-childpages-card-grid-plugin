@@ -2,12 +2,6 @@ import os
 from setuptools import setup, find_packages
 
 # --------------------
-# Initialization
-# --------------------
-
-VERSION_NUMBER = '0.7.0'
-
-# --------------------
 # Setup
 # --------------------
 
@@ -17,9 +11,10 @@ def read_file(fname):
 
 setup(
     name='mkdocs-childpages-card-grid-plugin',
-    version=VERSION_NUMBER,
-    description='Create card grids with links to child pages on your MkDocs site.',
+    version=read_file('VERSION'),
+    description='Create card grids with links to child pages on your MkDocs site',
     long_description=read_file('README.md'),
+    long_description_content_type='text/markdown',
     keywords=["mkdocs", "plugin", "python", "child-pages", "card-grid"],
     url='https://github.com/faustool/mkdocs-childpages-card-grid-plugin',
     author='Fausto Oliveira',
@@ -30,12 +25,11 @@ setup(
         "mkdocs-material>=8.5.0"
     ],
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3+'
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python :: 3'
     ],
     include_package_data=True,
     packages=find_packages(exclude=['test']),
