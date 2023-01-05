@@ -8,7 +8,10 @@ if test "$RELEASE_VERSION" == ""; then
     exit 1
 fi
 
-git checkout -b "release-${RELEASE_VERSION}" "develop"
+SOURCE_BRANCH="develop"
+RELEASE_BRANCH="release-${RELEASE_VERSION}"
+
+git checkout -b $RELEASE_BRANCH $SOURCE_BRANCH
 echo $RELEASE_VERSION > VERSION
 git commit -a -m "Bumped version number to ${RELEASE_VERSION}"
-git push
+git push -u origin $RELEASE_BRANCH
