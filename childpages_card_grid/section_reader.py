@@ -18,6 +18,7 @@ from mkdocs.plugins import Page
 
 LOG = logging.getLogger("mkdocs.plugins." + __name__)
 
+
 class SectionReader:
     """
     Read child sections from a navigation item and populate the nav_map dictionary for use
@@ -40,20 +41,25 @@ class SectionReader:
         Read the section
         """
         if isinstance(section.children[0], Page):
-            parent_page: Page = section.children[0]# first child is a page
-            LOG.debug("Parent: %s: %s", parent_page.title, parent_page.file.dest_uri)
-            nav_map[parent_page.file.dest_uri] = [] # init the child list for this page
-            for i in range(1, len(section.children)): # iterate over the subsequent children
-                child_candidate = section.children[i] # whe don't know waht this child is
+            parent_page: Page = section.children[0]  # first child is a page
+            LOG.debug("Parent: %s: %s", parent_page.title,
+                      parent_page.file.dest_uri)
+            # init the child list for this page
+            nav_map[parent_page.file.dest_uri] = []
+            # iterate over the subsequent children
+            for i in range(1, len(section.children)):
+                # whe don't know waht this child is
+                child_candidate = section.children[i]
                 child_page = None
-                if isinstance(child_candidate, Page): # is it a page?
-                    child_page = child_candidate # the child page is the child itself
+                if isinstance(child_candidate, Page):  # is it a page?
+                    child_page = child_candidate  # the child page is the child itself
                 # is the candidate a section? does it have a child and is the child a page?
                 elif type(child_candidate).__name__ == "Section" \
-                    and child_candidate.children \
-                    and isinstance(child_candidate.children[0], Page):
+                        and child_candidate.children \
+                        and isinstance(child_candidate.children[0], Page):
                     # the page is the first child of the section
                     child_page = child_candidate.children[0]
-                LOG.debug("  Child: %s: %s", child_page.title, child_page.file.dest_uri)
+                LOG.debug("  Child: %s: %s", child_page.title,
+                          child_page.file.dest_uri)
                 # insert the child page to the navigation map
                 nav_map[parent_page.file.dest_uri].append(child_page)

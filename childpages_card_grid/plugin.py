@@ -33,6 +33,7 @@ class ChildPagesCardGridPluginConfig(base.Config):
     """
     include_all = c.Type(bool, default=True)
 
+
 class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
     """
     The actual plugin class - see README.md in the root directory for what the plugin does
@@ -53,7 +54,6 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
     def __init__(self):
         self.enabled = True
 
-
     def on_pre_build(self, *, config) -> None:
         """
         Clean the navigation map to read it again before every build
@@ -62,7 +62,6 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
 
         self.nav_map.clear()
         self.read = False
-
 
     def on_page_context(self, context, *, page, config, nav: Navigation):
         """
@@ -78,7 +77,6 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
 
         return context
 
-
     def read_item(self, item):
         """
         Recursively read items from the navigation object
@@ -90,7 +88,6 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
             if item.children:
                 for child in item.children:
                     self.read_item(child)
-
 
     def on_post_page(self, output: str, *, page: Page, config):
         """
@@ -118,8 +115,9 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
                 page_parser.feed(output)
 
                 if page_parser.article_closing_tag_location:
-                    new_content = self.content_manager.generate_cards_div(page, child_list)
-                    new_output = self.content_manager.insert_new_content( \
+                    new_content = self.content_manager.generate_cards_div(
+                        page, child_list)
+                    new_output = self.content_manager.insert_new_content(
                         output, new_content, page_parser.article_closing_tag_location)
                     return new_output
 

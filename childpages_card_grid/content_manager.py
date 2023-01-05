@@ -17,6 +17,7 @@ from mkdocs.plugins import Page
 
 from .page_parser import ArticleClosingTagLocation
 
+
 class ContentManager:
     """
     Manage the HTML contents of the pages that are being modified by this plugin
@@ -36,8 +37,8 @@ class ContentManager:
         new_content += '</div>'
         return new_content
 
-    def insert_new_content(self, content: str, new_content: str, \
-            article_closing_tag_location: ArticleClosingTagLocation) -> str:
+    def insert_new_content(self, content: str, new_content: str,
+                           article_closing_tag_location: ArticleClosingTagLocation) -> str:
         """
         Takes a content string and adds the new_content to it in the correct position,
         given the article_closing_tag_location
@@ -45,9 +46,10 @@ class ContentManager:
         content_lines = content.splitlines()
 
         line_str = content_lines[article_closing_tag_location.line - 1]
-        being_str = line_str[:article_closing_tag_location.offset -1]
+        being_str = line_str[:article_closing_tag_location.offset - 1]
         end_str = line_str[article_closing_tag_location.offset:]
-        content_lines[article_closing_tag_location.line - 1] = being_str + new_content + end_str
+        content_lines[article_closing_tag_location.line -
+                      1] = being_str + new_content + end_str
 
         new_output = os.linesep.join(content_lines)
 

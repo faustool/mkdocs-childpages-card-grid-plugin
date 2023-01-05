@@ -17,6 +17,7 @@ import dataclasses
 
 LOG = logging.getLogger("mkdocs.plugins." + __name__)
 
+
 @dataclasses.dataclass
 class ArticleClosingTagLocation:
     """
@@ -30,6 +31,7 @@ class ArticleClosingTagLocation:
         self.line = line
         self.offset = offset
 
+
 class PageParser(HTMLParser):
     """
     HTML Parser to read an HTML document and locate the closing </article> tag.
@@ -40,7 +42,8 @@ class PageParser(HTMLParser):
     def handle_endtag(self, tag):
         if tag == "article":
             line, offset = self.getpos()
-            self.article_closing_tag_location = ArticleClosingTagLocation(line, offset)
+            self.article_closing_tag_location = ArticleClosingTagLocation(
+                line, offset)
 
     def error(self, message: str):
         return LOG.error(message)
