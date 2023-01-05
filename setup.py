@@ -1,7 +1,5 @@
 import os
-import subprocess
-
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 # --------------------
 # Setup
@@ -9,7 +7,7 @@ from setuptools import setup, find_packages
 
 def read_file(fname):
     "Read a local file"
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    return open(file=os.path.join(os.path.dirname(__file__), fname), encoding="utf-8").read()
 
 setup(
     name='mkdocs-childpages-card-grid-plugin',

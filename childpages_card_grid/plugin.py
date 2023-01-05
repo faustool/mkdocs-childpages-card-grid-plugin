@@ -11,6 +11,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import logging
+from typing import Dict, List
+
 from mkdocs.config import base
 from mkdocs.config import config_options as c
 from mkdocs.plugins import BasePlugin, Navigation, Page
@@ -19,22 +22,27 @@ from .content_manager import ContentManager
 from .page_parser import PageParser
 from .section_reader import SectionReader
 
-import logging
-log = logging.getLogger("mkdocs.plugins." + __name__)
+LOG = logging.getLogger("mkdocs.plugins." + __name__)
 
 METADATA_NAME = 'childpages_card_grid'
 
 
 class ChildPagesCardGridPluginConfig(base.Config):
+    """
+    Plugin configuration class
+    """
     include_all = c.Type(bool, default=True)
 
 class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
+    """
+    The actual plugin class - see README.md in the root directory for what the plugin does
+    """
 
     # prevent reading the navigation map over and over again
     read = False
 
     # contains a map of child pages
-    nav_map = dict[str, list[Page]]()
+    nav_map: Dict[str, List[Page]] = dict()
 
     # manages the html manipulation
     content_manager = ContentManager()
@@ -46,19 +54,23 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
         self.enabled = True
 
 
-    def on_pre_build(self, config) -> None:
+    def on_pre_build(self, *, config) -> None:
         """
         Clean the navigation map to read it again before every build
         """
+        del config
+
         self.nav_map.clear()
         self.read = False
 
 
-    def on_page_context(self, context, page, config, nav: Navigation):
+    def on_page_context(self, context, *, page, config, nav: Navigation):
         """
         Populate the navigation map
         """
-        if not self.read: 
+        del page, config
+
+        if not self.read:
             for item in nav:
                 self.read_item(item)
 
@@ -80,19 +92,24 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
                     self.read_item(child)
 
 
-    def on_post_page(self, output: str, config, page: Page):
+    def on_post_page(self, output: str, *, page: Page, config):
         """
         Insert the children grid card into the page after the main tag
         """
+        del config
 
-        add_card_grid = self.config.include_all # add all children by default, or not, based on plugin config
+        # add all children by default, or not, based on plugin config
+        add_card_grid = self.config.include_all
 
         if METADATA_NAME in page.meta:
             metadata_value = page.meta[METADATA_NAME].lower()
-            if metadata_value == 'exclude': add_card_grid = False # set to false if metadata says to exclude
-            if metadata_value == 'include': add_card_grid = True # set to True if metadata says to include
+            # set to false if metadata says to exclude
+            if metadata_value == 'exclude':
+                add_card_grid = False
+            # set to True if metadata says to include
+            if metadata_value == 'include':
+                add_card_grid = True
 
-            
         if add_card_grid and page.file.dest_uri in self.nav_map:
             child_list = self.nav_map[page.file.dest_uri]
             if len(child_list) > 0:
@@ -101,9 +118,9 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
                 page_parser.feed(output)
 
                 if page_parser.article_closing_tag_location:
-                    new_content = self.content_manager.generate_new_content(page, child_list)
-                    new_output = self.content_manager.insert_new_content(output, new_content, page_parser.article_closing_tag_location)
+                    new_content = self.content_manager.generate_cards_div(page, child_list)
+                    new_output = self.content_manager.insert_new_content( \
+                        output, new_content, page_parser.article_closing_tag_location)
                     return new_output
-                    
-        return output
 
+        return output
