@@ -4,7 +4,7 @@
 
 This plugin allows users to automatically add card grids on their pages with links to child pages.
 
-Users can include card grids on all pages or configure using markdown metadata to include or exclude specific pages.
+Users can include card grids on all pages or configure using Markdown metadata to include or exclude specific pages.
 
 TODO items:
 
