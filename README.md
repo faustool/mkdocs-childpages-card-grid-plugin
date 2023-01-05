@@ -30,11 +30,12 @@ plugins:
       # the title shown above the card grid (default: 'Child pages')
       cards_title: 'Child pages'
 ```
+
 ## Page Metadata
 
 ### `childpages_card_grid`
 
-When `include_all: True`, it possible to exclude the card grid from a page with the metadata: `childpages_card_grid: exclude`. 
+When `include_all: True`, it possible to exclude the card grid from a page with the metadata: `childpages_card_grid: exclude`.
 
 Likewise, when `include_all: False`, it is possible to include the card grid in a page using `childpages_card_grid: include`.
 
@@ -77,6 +78,6 @@ It is possible to customize the card grid title of a specific page with the `chi
 }
 ```
 
-# Limitations
+## Limitations
 
 This plugin was only tested with MkDocs Material Theme and the `navigation.indexes` feature enabled. It may be that other themes or other features of the Material theme generate a different `nav` tree and this plugin will not be able to figure out the parent/child pages.
