@@ -23,11 +23,12 @@ class ContentManager:
     Manage the HTML contents of the pages that are being modified by this plugin
     """
 
-    def generate_cards_div(self, page: Page, child_list: List[Page]) -> str:
+    def generate_cards_div(self, page: Page, title: str, child_list: List[Page]) -> str:
         """
         Generate the div containing all cards
         """
-        new_content = '<div class="cards">'
+        new_content = f'<div class="card_title">{title}</div>'
+        new_content += '<div class="cards">'
         for child in child_list:
             new_content += f'<a href="{child.file.url_relative_to(page.file)}">'
             new_content += '<div class="card"><div class="card_container">'

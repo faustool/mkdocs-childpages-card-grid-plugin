@@ -25,13 +25,22 @@ extra_css:
 
 plugins:
   - childpages-card-grid:
-      # include card grids on all pages by default (default True)
+      # include card grids on all pages (default True)
       include_all: True
+      # the title shown above the card grid (default: 'Child pages')
+      cards_title: 'Child pages'
 ```
+## Page Metadata
+
+### `childpages_card_grid`
 
 When `include_all: True`, it possible to exclude the card grid from a page with the metadata: `childpages_card_grid: exclude`. 
 
 Likewise, when `include_all: False`, it is possible to include the card grid in a page using `childpages_card_grid: include`.
+
+### `childpages_card_grid_title`
+
+It is possible to customize the card grid title of a specific page with the `childpages_card_grid_title` metadata.
 
 ## Sample childpages_card_grid.css
 
@@ -48,6 +57,13 @@ Likewise, when `include_all: False`, it is possible to include the card grid in 
     /* Add shadows to create the "card" effect */
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
+}
+
+.card_title {
+    padding: 1rem 0 1rem 0;
+    border-top: 1px;
+    border-top-color: gray;
+    border-top-style: solid;
 }
 
 .card:hover {
