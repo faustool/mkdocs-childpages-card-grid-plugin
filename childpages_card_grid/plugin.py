@@ -24,7 +24,8 @@ from .section_reader import SectionReader
 
 LOG = logging.getLogger("mkdocs.plugins." + __name__)
 
-METADATA_NAME = 'childpages_card_grid'
+DEFAULT_METADATA_NAME = 'childpages_card_grid'
+TITLE_METADATA_NAME = DEFAULT_METADATA_NAME + '_title'
 
 
 class ChildPagesCardGridPluginConfig(base.Config):
@@ -32,6 +33,7 @@ class ChildPagesCardGridPluginConfig(base.Config):
     Plugin configuration class
     """
     include_all = c.Type(bool, default=True)
+    cards_title = c.Type(str, default='Child pages')
 
 
 class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
@@ -98,14 +100,21 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
         # add all children by default, or not, based on plugin config
         add_card_grid = self.config.include_all
 
-        if METADATA_NAME in page.meta:
-            metadata_value = page.meta[METADATA_NAME].lower()
+        if DEFAULT_METADATA_NAME in page.meta:
+            metadata_value = page.meta[DEFAULT_METADATA_NAME].lower()
             # set to false if metadata says to exclude
             if metadata_value == 'exclude':
                 add_card_grid = False
             # set to True if metadata says to include
             if metadata_value == 'include':
                 add_card_grid = True
+
+        cards_title = self.config.cards_title
+        LOG.info('page.title=%s', page.title)
+        LOG.info('TITLE_METADATA_NAME=%s', TITLE_METADATA_NAME)
+        if TITLE_METADATA_NAME in page.meta:
+            cards_title = page.meta[TITLE_METADATA_NAME]
+        LOG.info('cards_title=%s', cards_title)
 
         if add_card_grid and page.file.dest_uri in self.nav_map:
             child_list = self.nav_map[page.file.dest_uri]
@@ -116,7 +125,7 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
 
                 if page_parser.article_closing_tag_location:
                     new_content = self.content_manager.generate_cards_div(
-                        page, child_list)
+                        page, cards_title, child_list)
                     new_output = self.content_manager.insert_new_content(
                         output, new_content, page_parser.article_closing_tag_location)
                     return new_output
