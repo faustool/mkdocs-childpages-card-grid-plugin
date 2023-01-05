@@ -20,8 +20,10 @@ fi
 
 if test -d "./dist"; then
     warn "RELEASE ${package_name} (${package_version}) ON PYPI:"
-    warn "Upload to Pypi..."
     if twine upload -r $pypi_repo dist/* ; then
+        warn "... create tag ${package_version}, and push to remote git repo..."
+        git tag $package_version
+        git push --tags
         warn "Done (${package_version})!"
     else
         warn "Failed (${package_version})!"
