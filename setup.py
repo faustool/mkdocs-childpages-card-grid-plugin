@@ -19,7 +19,7 @@ setup(
     url='https://github.com/faustool/mkdocs-childpages-card-grid-plugin',
     author='Fausto Oliveira',
     license='Apache License, Version 2.0',
-    python_requires='>=3.5',
+    python_requires='>=3.7',
     install_requires=[
         'mkdocs>=1.4.0',
         "mkdocs-material>=8.5.0"
