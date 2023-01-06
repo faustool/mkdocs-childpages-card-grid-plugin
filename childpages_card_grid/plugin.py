@@ -110,11 +110,8 @@ class ChildPagesCardGridPlugin(BasePlugin[ChildPagesCardGridPluginConfig]):
                 add_card_grid = True
 
         cards_title = self.config.cards_title
-        LOG.info('page.title=%s', page.title)
-        LOG.info('TITLE_METADATA_NAME=%s', TITLE_METADATA_NAME)
         if TITLE_METADATA_NAME in page.meta:
             cards_title = page.meta[TITLE_METADATA_NAME]
-        LOG.info('cards_title=%s', cards_title)
 
         if add_card_grid and page.file.dest_uri in self.nav_map:
             child_list = self.nav_map[page.file.dest_uri]
